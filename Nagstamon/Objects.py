@@ -165,13 +165,20 @@ class GenericService(GenericObject):
         """
             return hash for event history tracking
         """
+        return " ".join((self.server, self.site, self.host, self.name, self.status))
+
+    def get_hash_with_status_information(self):
+        """
+            return hash for event history tracking with status information
+        """
         return " ".join((self.server, self.site, self.host, self.name, self.status, self.status_information))
+
 
 
 class Result(object):
 
     """
-    multi purpose result object, used in Servers.Generic.FetchURL()
+    multipurpose result object, used in Servers.Generic.FetchURL()
     """
     result = ''
     error = ''

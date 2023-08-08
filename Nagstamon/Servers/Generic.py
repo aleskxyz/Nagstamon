@@ -1410,7 +1410,7 @@ class GenericServer(object):
             for service in host.services.values():
                 # same for services of host
                 if service.visible:
-                    self.events_current[service.get_hash()] = True
+                    self.events_current[service.get_hash_with_status_information()] = True
 
         # check if some cached event still is relevant - kick it out if not
         for event in list(self.events_history.keys()):
@@ -1690,7 +1690,7 @@ class GenericServer(object):
         """
             return number of unseen events - those which are set True as unseen
         """
-        return(len(list((e for e in self.events_history if self.events_history[e] is True))))
+        return len(list((e for e in self.events_history if self.events_history[e] is True)))
 
     @staticmethod
     def check_for_error(result, error, status_code) -> Optional[Result]:

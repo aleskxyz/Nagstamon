@@ -4140,16 +4140,15 @@ class TreeView(QTreeView):
                         for state in self.server.nagitems_filtered[category].values():
                             for item in state:
                                 self.data_array.append(list(item.get_columns(HEADERS)))
-
                                 # hash for freshness comparison
-                                hash = item.get_hash()
-
                                 if item.is_host():
+                                    hash = item.get_hash()
                                     if hash in self.server.events_history and \
                                             self.server.events_history[hash] is True:
                                         # second item in last data_array line is host flags
                                         self.data_array[-1][1] += 'N'
                                 else:
+                                    hash = item.get_hash_with_status_information()
                                     if hash in self.server.events_history and \
                                             self.server.events_history[hash] is True:
                                         # fourth item in last data_array line is service flags
