@@ -60,18 +60,30 @@ def convert_timestring_to_utc(timestring):
 
 
 def detect_from_labels(labels, config_label_list, default_value="", list_delimiter=","):
-    """Returns the name of the label that first matched between `labels` and `config_label_list`.
-    If there has not been a match it returns an empty string.
+    """Returns the concatenated label values or the matched label name from `labels` based on the `config_label_list`.
+    If the `config_label_list` starts with '#', it returns the concatenated label values. Otherwise, it returns
+    the name of the label that first matches between `labels` and `config_label_list`.
+    If there has not been a match, it returns the `default_value`.
 
     Args:
-        labels (list(str)):  A list of string labels
-        config_label_list (str):  A delimiter seperated list - Delimiter can be specified with `list_delimiter`. Default delimiter is ",".
+        labels (dict):  A dictionary containing string labels as keys and their corresponding values
+        config_label_list (str):  A delimiter-separated list - Delimiter can be specified with `list_delimiter`. Default delimiter is ",".
         default_value (str, optional): The value to return if there has not been a match. Defaults to "".
         list_delimiter (str, optional): The delimiter used in the value of `config_label_list`. Defaults to ",".
 
     Returns:
-        str: The matched label name or an empty string if there was no match
+        str: The concatenated label values or the matched label name, or the `default_value` if there was no match
     """
+    if config_label_list.startswith("#"):
+        result = ""
+        for each_label in config_label_list[1:].split(list_delimiter):
+            if each_label in labels:
+                result += labels.get(each_label) + list_delimiter
+            else:
+                result += default_value + list_delimiter
+        result = result.rstrip(list_delimiter)
+        return result
+
     result = default_value
     for each_label in config_label_list.split(list_delimiter):
         if each_label in labels:
